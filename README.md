@@ -45,4 +45,20 @@ trueとfalseでわかりにくいですがちゃんと動いてますね。
 ```
 白は`true`、黒は`false`、スペースがあるところは`undefined`です
 
+```js
+clientWrite(10, 10, 1);
+clientWrite(11, 10, 1);
+clientWrite(12, 10, 1);
+clientWrite(13, 10, 1);
+clientWrite(14, 10, 1);
+clientWrite(15, 10, 1);
+clientWrite(16, 10, 1);
+clientWrite(17, 10, 1);
+clientWrite(18, 10, 1);
+clientWrite(19, 10, 1);
+
+ep = evaluate(ep);
+```
+ちなみにこれはペンタデカスロンです。周期15で振動します。
+
 もっとユーザーフレンドリーなUI作ってるので待っててね。待てない人はconsole開いて遊んでてください
