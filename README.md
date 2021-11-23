@@ -1,13 +1,14 @@
 # lifegameJS
 A lifegame which is using JS.
 
-JSで作ったライフゲームです。(3作目)
-- [1作目](https://www.mugisus.com/game_of_life)
-- [2作目](https://www.mugisus.com/game_of_life_inf)
+JSを使ったライフゲームです。(3作目)
+- [1作目](https://www.mugisus.com/game_of_life) [(ソースコード)](https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life/src.js)
+- [2作目](https://www.mugisus.com/game_of_life_inf) [(ソースコード)](https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life_inf/src.js)
 - [3作目](https://www.mugisus.com/lifegameJS) ←これ
 
 [lifegame.js](https://github.com/MugiSus/lifegameJS/blob/main/lifegame.js)
-速度も速いしソースコードも随分と綺麗になったんじゃないですかね。あと趣味で書いたコードなので可読性には帰ってもらいました。
+
+速度も速いしソースコードも随分と綺麗になったんじゃないですかね。あと趣味で書いたコードなので可読性には帰ってもらっています
 
 ```js
 clientWrite(0, 0, 1);
@@ -18,20 +19,20 @@ clientWrite(-1, 2, 1);
 
 for (let i = 0; i < 100; i++) ep = evaluate(ep);
 ```
-これはグライダーを100世代動かすコードです
+これはグライダーを100世代動かすコードです。軽いのですぐです
 
 実行結果はオブジェクトmに出てます
 
 ```js
 >>> m
-22: {25: false, 26: false, 27: false}
-23: {24: false, 25: false, 26: false, 27: false, 28: false}
-24: {24: false, 25: false, 26: false, 27: true, 28: false}
-25: {24: false, 25: true, 26: false, 27: true, 28: false}
-26: {24: false, 25: false, 26: true, 27: true, 28: false}
-27: {25: false, 26: false, 27: false}
+<<< 22: {25: false, 26: false, 27: false}
+    23: {24: false, 25: false, 26: false, 27: false, 28: false}
+    24: {24: false, 25: false, 26: false, 27: true, 28: false}
+    25: {24: false, 25: true, 26: false, 27: true, 28: false}
+    26: {24: false, 25: false, 26: true, 27: true, 28: false}
+    27: {25: false, 26: false, 27: false}
 ```
-trueとfalseでわかりにくいですがちゃんと動いてますね
+trueとfalseでわかりにくいですがちゃんと動いてますね。
 
 図示するとこんな感じです
 ```
@@ -44,4 +45,4 @@ trueとfalseでわかりにくいですがちゃんと動いてますね
 ```
 白は`true`、黒は`false`、スペースがあるところは`undefined`です
 
-もっとユーザーフレンドリーなUI作ってるので待っててね。待てない人はconsole開いて遊んでてください。
+もっとユーザーフレンドリーなUI作ってるので待っててね。待てない人はconsole開いて遊んでてください
