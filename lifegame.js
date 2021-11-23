@@ -17,9 +17,9 @@ let evaluate =(ep)=> {
     let x, y; // position
     ep.forEach(p => ( 
         [x, y] = p, // unpack
-        !(nm[x]?.[y] >= 0) && // filter out already evaluated
-        (w(nm, x, y, gn(x, y)) && nep.push(p) || r(x, y)) && // write next map
-        nep.push([x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]) // add next positions to evaluate
+        nm[x]?.[y] ?? // filter out already evaluated
+        ((w(nm, x, y, gn(x, y)) && nep.push(p) || r(x, y)) && // write next map
+        nep.push([x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1])) // add next positions to evaluate
     ));
     m = nm; // update map
     return nep; // return next positions to evaluate
