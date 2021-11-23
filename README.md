@@ -4,7 +4,7 @@ A lifegame which is using JS.
 JSで作ったライフゲームです。(3作目)
 - [1作目](https://www.mugisus.com/game_of_life)
 - [2作目](https://www.mugisus.com/game_of_life_inf)
-- 3作目 ←これ
+- [3作目](https://www.mugisus.com/lifegameJS) ←これ
 
 [lifegame.js](https://github.com/MugiSus/lifegameJS/blob/main/lifegame.js)
 速度も速いしソースコードも随分と綺麗になったんじゃないですかね。あと趣味で書いたコードなので可読性には帰ってもらいました。
