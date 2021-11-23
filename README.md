@@ -11,13 +11,13 @@ JSを使ったライフゲームです。(3作目)
 速度も速いしソースコードも随分と綺麗になったんじゃないですかね。あと趣味で書いたコードなので可読性には帰ってもらっています
 
 ```js
-clientWrite(0, 0, 1);
-clientWrite(1, 1, 1);
-clientWrite(1, 2, 1);
-clientWrite(0, 2, 1);
-clientWrite(-1, 2, 1);
+cw(0, 0, 1);
+cw(1, 1, 1);
+cw(1, 2, 1);
+cw(0, 2, 1);
+cw(-1, 2, 1);
 
-for (let i = 0; i < 100; i++) ep = evaluate(ep);
+for (let i = 0; i < 100; i++) ep = e(ep);
 ```
 これはグライダーを100世代動かすコードです。軽いのですぐです
 
@@ -46,18 +46,18 @@ trueとfalseでわかりにくいですがちゃんと動いてますね。
 ◻️は`true`、◼️は`false`、✖️のあるところは`undefined`です
 
 ```js
-clientWrite(10, 10, 1);
-clientWrite(11, 10, 1);
-clientWrite(12, 10, 1);
-clientWrite(13, 10, 1);
-clientWrite(14, 10, 1);
-clientWrite(15, 10, 1);
-clientWrite(16, 10, 1);
-clientWrite(17, 10, 1);
-clientWrite(18, 10, 1);
-clientWrite(19, 10, 1);
+cw(10, 10, 1);
+cw(11, 10, 1);
+cw(12, 10, 1);
+cw(13, 10, 1);
+cw(14, 10, 1);
+cw(15, 10, 1);
+cw(16, 10, 1);
+cw(17, 10, 1);
+cw(18, 10, 1);
+cw(19, 10, 1);
 
-ep = evaluate(ep);
+ep = e(ep);
 ```
 ちなみにこれはペンタデカスロンです。周期15で振動します。
 
