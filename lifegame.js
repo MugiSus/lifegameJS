@@ -1,6 +1,5 @@
 let m = new Object(); // map
 let ep = new Array(); // positions to evaluate
-let ctr = 0; // counter
 
 let w =(m, x, y, v)=> (m[x] = m[x] ?? new Object())[y] = v; // overwrite
 let r =(x, y)=> m[x]?.[y] ?? 0; // read
@@ -19,8 +18,7 @@ let e =(ep)=> { // evaluate
     ep.forEach(p => ( 
         [x, y] = p, // unpack
         nm[x]?.[y] ?? // filter out already evaluated
-        (ctr++, // increment counter
-        (w(nm, x, y, gn(x, y)) && nep.push(p) || r(x, y)) && // write next map
+        ((w(nm, x, y, gn(x, y)) && nep.push(p) || r(x, y)) && // write next map
         nep.push([x - 1, y - 1], [x - 1, y], [x - 1, y + 1], [x, y - 1], [x, y + 1], [x + 1, y - 1], [x + 1, y], [x + 1, y + 1])) // add next positions to evaluate
     ));
     m = nm; // update map
