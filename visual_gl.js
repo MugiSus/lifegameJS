@@ -46,36 +46,59 @@ gl.vertexAttribPointer(vertex, 2, gl.FLOAT, false, 0, 0);
 let scrollx = 0, scrolly = 0, zoom = 1;
 
 let getVertices =(scrollx, scrolly, zoom)=> {
-    let vertices = [];
+    let vertices = {
+        alive: [],
+        dead: [],
+    };
 
     Object.keys(m).forEach(x => 
         Object.keys(m[x]).forEach(y => 
-            m[x][y] && vertices.push(
-                x * 100 - 45, y * 100 - 45,
-                x * 100 + 45, y * 100 - 45,
-                x * 100 + 45, y * 100 + 45,
-                x * 100 - 45, y * 100 - 45,
-                x * 100 + 45, y * 100 + 45,
-                x * 100 - 45, y * 100 + 45,
-            )
+            m[x][y] ?
+                vertices.alive.push(
+                    x * 100 - 45, y * 100 - 45,
+                    x * 100 + 45, y * 100 - 45,
+                    x * 100 + 45, y * 100 + 45,
+                    x * 100 - 45, y * 100 - 45,
+                    x * 100 + 45, y * 100 + 45,
+                    x * 100 - 45, y * 100 + 45,
+                )
+            :
+                vertices.dead.push(
+                    x * 100 - 45, y * 100 - 45,
+                    x * 100 + 45, y * 100 - 45,
+                    x * 100 + 45, y * 100 + 45,
+                    x * 100 - 45, y * 100 - 45,
+                    x * 100 + 45, y * 100 + 45,
+                    x * 100 - 45, y * 100 + 45,
+                )
         )
     );
 
-    return Float32Array.from(vertices).map((value, index) => 
-        index % 2 ?
-        -(value - scrolly) * zoom / canvas.height :
-        (value - scrollx) * zoom / canvas.width
-    );
+    Object.keys(vertices).forEach(key => {
+        vertices[key] = new Float32Array(vertices[key]).map((value, index) => 
+            index % 2 ?
+            -(value - scrolly) * zoom / canvas.height :
+            (value - scrollx) * zoom / canvas.width
+        );
+    })
+
+    return vertices;
 }
 
 function main() {
     let vertices = getVertices(scrollx, scrolly, zoom);
 
-    if (vertices.length) {
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.DYNAMIC_DRAW)
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES, 0, vertices.length / 2);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    if (vertices.alive.length) {
+        gl.bufferData(gl.ARRAY_BUFFER, vertices.alive, gl.DYNAMIC_DRAW);
+        gl.drawArrays(gl.TRIANGLES, 0, vertices.alive.length / 2);
     }
+
+    // if (vertices.dead.length) {
+    //     gl.bufferData(gl.ARRAY_BUFFER, vertices.dead, gl.DYNAMIC_DRAW);
+    //     gl.drawArrays(gl.TRIANGLES, 0, vertices.dead.length / 2);
+    // }
 
     requestAnimationFrame(main);
 }
