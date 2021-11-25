@@ -1,12 +1,6 @@
 const canvas = document.getElementById('canvas');
 const gl = canvas.getContext('webgl');
 
-let resize =()=> {
-    [canvas.height, canvas.width] = [window.innerHeight, window.innerWidth];
-    gl.viewport(0, 0, canvas.width, canvas.height);
-}
-window.addEventListener('resize', resize);
-
 let viewportSize = 0;
 
 gl.clearColor(0.08, 0.08, 0.08, 1.0);
@@ -86,66 +80,6 @@ function main() {
     requestAnimationFrame(main);
 }
 
-// galaxy
-
-cw(10, 10, 1);
-cw(11, 10, 1);
-cw(12, 10, 1);
-cw(13, 10, 1);
-cw(14, 10, 1);
-cw(15, 10, 1);
-cw(10, 11, 1);
-cw(11, 11, 1);
-cw(12, 11, 1);
-cw(13, 11, 1);
-cw(14, 11, 1);
-cw(15, 11, 1);
-
-cw(17, 10, 1);
-cw(17, 11, 1);
-cw(17, 12, 1);
-cw(17, 13, 1);
-cw(17, 14, 1);
-cw(17, 15, 1);
-cw(18, 10, 1);
-cw(18, 11, 1);
-cw(18, 12, 1);
-cw(18, 13, 1);
-cw(18, 14, 1);
-cw(18, 15, 1);
-
-cw(10, 13, 1);
-cw(10, 14, 1);
-cw(10, 15, 1);
-cw(10, 16, 1);
-cw(10, 17, 1);
-cw(10, 18, 1);
-cw(11, 13, 1);
-cw(11, 14, 1);
-cw(11, 15, 1);
-cw(11, 16, 1);
-cw(11, 17, 1);
-cw(11, 18, 1);
-
-cw(13, 17, 1);
-cw(14, 17, 1);
-cw(15, 17, 1);
-cw(16, 17, 1);
-cw(17, 17, 1);
-cw(18, 17, 1);
-cw(13, 18, 1);
-cw(14, 18, 1);
-cw(15, 18, 1);
-cw(16, 18, 1);
-cw(17, 18, 1);
-cw(18, 18, 1);
-
-scrollx = 1400;
-scrolly = 1400;
-
-setInterval(() => ep = e(ep), 100)
-
 // main
 
-resize();
 main();
