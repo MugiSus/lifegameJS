@@ -31,7 +31,7 @@ resize();
 let setFullMap =(map, sx, sy, z)=> {
     map.split('\n').forEach((line, y) => 
         line.split('').forEach((char, x) => 
-            char == '*' && cw(x - line.lastIndexOf(" "), y, true)
+            char == '*' && cw(x - (line.lastIndexOf(" ") + 1), y, true)
         )
     );
     [scrollx, scrolly, zoom] = [sx, sy, z];
