@@ -112,10 +112,10 @@ const presets = {
             ..*....*
             **
             .**.***
-        `, -3000, 1300, 0.06),
+        `, -3000, 1000, 0.06),
 };
 
-(presets[paramaters.get('preset')] ?? new MapPreset("", 0, 0, 1)).apply(0, 0);
+(presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
 
 setInterval(() => {
     for (let i = 0; i < Math.max(paramaters.get("gpf"), 1); i++) ep = e(ep);
