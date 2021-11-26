@@ -106,17 +106,33 @@ const presets = {
             .*
             ...*
             **..***
-        `, -3000, -2000, 0.075),
+        `, -3000, -2000, 0.075), // 5206 generations
     rabbits:
         new MapPreset(`
             ..*....*
             **
             .**.***
-        `, -3000, 1000, 0.06),
+        `, -3000, 1000, 0.06), // 17331 generations
+    "23334m":
+        new MapPreset(`
+            ..*
+            **
+            .*
+            *..*
+            ....*
+            .*..*
+            ..*.*
+            .*
+        `, -1800, 400, 0.035), // 23334 generations
 };
 
 (presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
 
+const gpf = (paramaters.get("gpf") ?? 1) * 1;
+const speed = (paramaters.get("speed") ?? 100) * 1;
+let generations = 0;
+
 setInterval(() => {
-    for (let i = 0; i < Math.max(paramaters.get("gpf"), 1); i++) ep = e(ep);
-}, (paramaters.get("speed") ?? 100) * 1)
+    generations += gpf;
+    for (let i = 0; i < gpf; i++) ep = e(ep);
+}, speed)
