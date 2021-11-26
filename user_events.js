@@ -58,7 +58,7 @@ switch (paramaters.get('preset')) {
             **.......
             **.******
             **.******
-        `, 400, 550, 1);
+        `, 400, 500, 1);
     } break;
     case "glidergun": {
         setFullMap(`
@@ -108,4 +108,4 @@ switch (paramaters.get('preset')) {
 
 setInterval(() => {
     for (let i = 0; i < Math.max(paramaters.get("gpf"), 1); i++) ep = e(ep);
-}, paramaters.get("speed") * 1 ?? 100)
+}, (paramaters.get("speed") ?? 100) * 1)
