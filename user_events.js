@@ -28,13 +28,22 @@ resize();
 
 // preset
 
-let setFullMap =(map, sx, sy, z)=> {
-    map.split('\n').forEach((line, y) => 
-        line.split('').forEach((char, x) => 
-            char == '*' && cw(x - (line.lastIndexOf(" ") + 1), y, true)
-        )
-    );
-    [scrollx, scrolly, zoom] = [sx, sy, z];
+class MapPreset {
+    constructor(map, scrollx, scrolly, zoom) {
+        this.map = map;
+        this.scrollx = scrollx;
+        this.scrolly = scrolly;
+        this.zoom = zoom;
+    }
+
+    apply(dx, dy) {
+        this.map.split('\n').forEach((line, y) => 
+            line.split('').forEach((char, x) => 
+                char == '*' && cw(dx + x - (line.lastIndexOf(" ") + 1), dy + y, true)
+            )
+        );
+        [scrollx, scrolly, zoom] = [this.scrollx, this.scrolly, this.zoom];
+    }
 }
 
 // query
@@ -46,9 +55,9 @@ let paramaters = new URLSearchParams(location.search);
  * gpf: generations per frame
  */
 
-switch (paramaters.get('preset')) {
-    case "galaxy": {
-        setFullMap(`
+const presets = {
+    galaxy:
+        new MapPreset(`
             ******.**
             ******.**
             .......**
@@ -58,10 +67,9 @@ switch (paramaters.get('preset')) {
             **.......
             **.******
             **.******
-        `, 400, 500, 1);
-    } break;
-    case "glidergun": {
-        setFullMap(`
+        `, 400, 500, 1),
+    glidergun: 
+        new MapPreset(`
             ........................*
             ......................*.*
             ............**......**............**
@@ -92,19 +100,22 @@ switch (paramaters.get('preset')) {
             ........................................*.*
             ..........................................*
             ..........................................**
-        `, 2150, 1500, 0.4);
-    } break;
-    case "acorn": {
-        setFullMap(`
+        `, 2150, 1500, 0.4),
+    acorn: 
+        new MapPreset(`
             .*
             ...*
             **..***
-        `, -3000, -2000, 0.075)
-    } break;
-    default: {
-        setFullMap("", 0, 0, 1);
-    }
-}
+        `, -3000, -2000, 0.075),
+    rabbits:
+        new MapPreset(`
+            ..*....*
+            **
+            .**.***
+        `, -3000, 1300, 0.06),
+};
+
+(presets[paramaters.get('preset')] ?? new MapPreset("", 0, 0, 1)).apply(0, 0);
 
 setInterval(() => {
     for (let i = 0; i < Math.max(paramaters.get("gpf"), 1); i++) ep = e(ep);
