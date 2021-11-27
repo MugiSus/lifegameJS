@@ -128,8 +128,8 @@ const presets = {
 
 (presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
 
-const gpf = (paramaters.get("gpf") ?? 1) * 1;
-const speed = (paramaters.get("speed") ?? 100) * 1;
+let gpf = (paramaters.get("gpf") ?? 1) * 1;
+let speed = (paramaters.get("speed") ?? 100) * 1;
 let generations = 0;
 
 setInterval(() => {
