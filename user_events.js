@@ -5,7 +5,7 @@ let resize =()=> {
 
 // mouse events
 
-let mousestatus = {
+let mousestate = {
     left: false, // left mouse button
     right: false, // right mouse button
     middle: false, // middle mouse button
@@ -17,24 +17,19 @@ let mousestatus = {
 }
 
 let mousemove =(event)=> {
-    [mousestatus.x, mousestatus.y, mousestatus.propx, mousestatus.propy] = [
-        event.clientX,
-        event.clientY,
-        event.clientX / canvas.width * 2 - 1,
-        event.clientY / canvas.height * 2 - 1,
-    ];
+    [mousestate.x, mousestate.y] = [event.clientX, event.clientY];
 }
 
 let mousedown =(event)=> {
-    mousestatus[["left", "middle", "right"][event.button]] = true;
+    mousestate[["left", "middle", "right"][event.button]] = true;
 }
 
 let mouseup =(event)=> {
-    mousestatus[["left", "middle", "right"][event.button]] = false;
+    mousestate[["left", "middle", "right"][event.button]] = false;
 }
 
 let wheel =(event)=> {
-    mousestatus.wheel += event.deltaY;
+    mousestate.wheel += event.deltaY;
 }
 
 // touch events
@@ -109,7 +104,7 @@ const presets = {
             **.......
             **.******
             **.******
-        `, 400, 500, 1),
+        `, 400, 500, 0.5),
     glidergun: 
         new MapPreset(`
             ........................*
@@ -142,19 +137,19 @@ const presets = {
             ........................................*.*
             ..........................................*
             ..........................................**
-        `, 2150, 1500, 0.4),
+        `, 2150, 1500, 0.2),
     acorn: 
         new MapPreset(`
             .*
             ...*
             **..***
-        `, -3000, -2000, 0.075), // 5206 generations
+        `, -3000, -2000, 0.0375), // 5206 generations
     rabbits:
         new MapPreset(`
             ..*....*
             **
             .**.***
-        `, -3000, 1000, 0.06), // 17331 generations
+        `, -3000, 1000, 0.03), // 17331 generations
     "23334m":
         new MapPreset(`
             ..*
@@ -165,7 +160,7 @@ const presets = {
             .*..*
             ..*.*
             .*
-        `, -1800, 400, 0.035), // 23334 generations
+        `, -1800, 400, 0.0175), // 23334 generations
 };
 
 // resize and begin mainloop

@@ -74,8 +74,8 @@ let getVertices =(scrollx, scrolly, zoom)=> {
     Object.keys(vertices).forEach(key => {
         vertices[key] = new Float32Array(vertices[key]).map((value, index) => 
             index % 2 ?
-            -(value - scrolly) * zoom / canvas.height :
-            (value - scrollx) * zoom / canvas.width
+            -(value - scrolly) * zoom / (canvas.height / 2) :
+            (value - scrollx) * zoom / (canvas.width / 2)
         );
     })
 
