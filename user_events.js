@@ -1,3 +1,44 @@
+let resize =()=> {
+    [canvas.height, canvas.width] = [window.innerHeight, window.innerWidth];
+    gl.viewport(0, 0, canvas.width, canvas.height);
+}
+
+// mouse events
+
+let mousestatus = {
+    left: false, // left mouse button
+    right: false, // right mouse button
+    middle: false, // middle mouse button
+    wheel: 0, // amount of mouse wheel movement
+    x: 0, // mouse x
+    y: 0, // mouse y
+    propx: 0, // proportional x
+    propy: 0, // proportional y
+}
+
+let mousemove =(event)=> {
+    [mousestatus.x, mousestatus.y, mousestatus.propx, mousestatus.propy] = [
+        event.clientX,
+        event.clientY,
+        event.clientX / canvas.width * 2 - 1,
+        event.clientY / canvas.height * 2 - 1,
+    ];
+}
+
+let mousedown =(event)=> {
+    mousestatus[["left", "middle", "right"][event.button]] = true;
+}
+
+let mouseup =(event)=> {
+    mousestatus[["left", "middle", "right"][event.button]] = false;
+}
+
+let wheel =(event)=> {
+    mousestatus.wheel += event.deltaY;
+}
+
+// touch events
+
 let touchstart =(event)=> {
     event.preventDefault();
 }
@@ -14,17 +55,18 @@ let touchend =(event)=> {
     event.preventDefault();
 }
 
-let resize =()=> {
-    [canvas.height, canvas.width] = [window.innerHeight, window.innerWidth];
-    gl.viewport(0, 0, canvas.width, canvas.height);
-}
+// add event listeners
 
-canvas.addEventListener('touchstart', touchstart);
-canvas.addEventListener('touchmove', touchmove);
-canvas.addEventListener('touchend', touchend);
 window.addEventListener('resize', resize);
+window.addEventListener('mousemove', mousemove);
+window.addEventListener('mousedown', mousedown);
+window.addEventListener('mouseup', mouseup);
+window.addEventListener('wheel', wheel);
+window.addEventListener('touchstart', touchstart);
+window.addEventListener('touchmove', touchmove);
+window.addEventListener('touchend', touchend);
 
-resize();
+window.oncontextmenu =()=> false; // disable right click menu
 
 // preset
 
@@ -125,6 +167,10 @@ const presets = {
             .*
         `, -1800, 400, 0.035), // 23334 generations
 };
+
+// resize and begin mainloop
+
+resize();
 
 (presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
 
