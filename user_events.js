@@ -12,12 +12,16 @@ let mousestate = {
     wheel: 0, // amount of mouse wheel movement
     x: 0, // mouse x
     y: 0, // mouse y
-    propx: 0, // proportional x
-    propy: 0, // proportional y
+    cellx: 0, // cell x
+    celly: 0, // cell y
 }
 
 let mousemove =(event)=> {
     [mousestate.x, mousestate.y] = [event.clientX, event.clientY];
+    [mousestate.cellx, mousestate.celly] = [
+        Math.floor(((mousestate.x - canvas.width / 2) / zoom + 50 + scrollx) / 100),
+        Math.floor(((mousestate.y - canvas.height / 2) / zoom + 50 + scrolly) / 100)
+    ]
 }
 
 let mousedown =(event)=> {
@@ -32,7 +36,7 @@ let wheel =(event)=> {
     mousestate.wheel += event.deltaY;
 }
 
-// touch events
+// touch events (wip)
 
 let touchstart =(event)=> {
     event.preventDefault();
@@ -74,7 +78,7 @@ class MapPreset {
     }
 
     apply(dx, dy) {
-        this.map.split('\n').forEach((line, y) => 
+        this.map.split('\n').filter(x => x).forEach((line, y) => 
             line.split('').forEach((char, x) => 
                 char == '*' && cw(dx + x - (line.lastIndexOf(" ") + 1), dy + y, true)
             )
@@ -104,7 +108,7 @@ const presets = {
             **.......
             **.******
             **.******
-        `, 400, 500, 0.5),
+        `, 400, 400, 0.5),
     glidergun: 
         new MapPreset(`
             ........................*
@@ -137,19 +141,19 @@ const presets = {
             ........................................*.*
             ..........................................*
             ..........................................**
-        `, 2150, 1500, 0.2),
+        `, 2150, 1400, 0.2),
     acorn: 
         new MapPreset(`
             .*
             ...*
             **..***
-        `, -3000, -2000, 0.0375), // 5206 generations
+        `, -3000, -1900, 0.0375), // 5206 generations
     rabbits:
         new MapPreset(`
             ..*....*
             **
             .**.***
-        `, -3000, 1000, 0.03), // 17331 generations
+        `, -3000, 900, 0.03), // 17331 generations
     "23334m":
         new MapPreset(`
             ..*
@@ -160,7 +164,7 @@ const presets = {
             .*..*
             ..*.*
             .*
-        `, -1800, 400, 0.0175), // 23334 generations
+        `, -1800, 300, 0.0175), // 23334 generations
 };
 
 // resize and begin mainloop
@@ -173,7 +177,27 @@ let gpf = (paramaters.get("gpf") ?? 1) * 1;
 let speed = (paramaters.get("speed") ?? 100) * 1;
 let generations = 0;
 
-setInterval(() => {
+let evaluateLoop =()=> {
     generations += gpf;
     for (let i = 0; i < gpf; i++) ep = e(ep);
-}, speed)
+}
+
+setInterval(evaluateLoop, speed);
+
+let mouseflag = false;
+let clientWriteMode = false;
+
+let clientWriteLoop =()=> {
+    requestAnimationFrame(clientWriteLoop);
+    if (mousestate.left) {
+        if (!mouseflag) {
+            mouseflag = true;
+            clientWriteMode = !r(mousestate.cellx, mousestate.celly);
+        }
+        cw(mousestate.cellx, mousestate.celly, clientWriteMode);
+    } else {
+        mouseflag = false;
+    }
+}
+
+clientWriteLoop();
