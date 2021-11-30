@@ -12,6 +12,9 @@ let mousestate = {
     wheel: 0, // amount of mouse wheel movement
     x: 0, // mouse x
     y: 0, // mouse y
+    dx: 0, // mouse x delta
+    dy: 0, // mouse y delta
+    
     cellx: 0, // cell x
     celly: 0, // cell y
 }
@@ -182,9 +185,7 @@ const presets = {
 
 // resize and begin mainloop
 
-resize();
-
-(presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
+const zoomRate = 0.999;
 
 let gpf = (paramaters.get("gpf") || 1) * 1;
 let speed = (paramaters.get("speed") ?? 100) * 1;
@@ -195,27 +196,74 @@ let evaluateLoop =()=> {
     for (let i = 0; i < gpf; i++) ep = e(ep);
 }
 
-setInterval(evaluateLoop, speed);
+let simulating = false;
+let intervalID = null;
 
-let mouseflag = false;
+let scrollOffsetX, scrollOffsetY, scrollFromX, scrollFromY;
+
+let mouseflag = {
+    left: false,
+    middle: false,
+    right: false,
+};
 let clientWriteMode = false;
 
-let clientWriteLoop =()=> {
-    requestAnimationFrame(clientWriteLoop);
+let clientControllLoop =()=> {
+    // client write
+
     if (mousestate.left) {
-        if (!mouseflag) {
-            mouseflag = true;
+        if (!mouseflag.left) {
+            mouseflag.left = true;
             clientWriteMode = !r(mousestate.cellx, mousestate.celly);
         }
         cw(mousestate.cellx, mousestate.celly, clientWriteMode);
     } else {
-        mouseflag = false;
+        mouseflag.left = false;
     }
+
+    // stop/start simulation
+
+    if (mousestate.right) {
+        if (!mouseflag.right) {
+            mouseflag.right = true;
+            simulating = !simulating;
+            if (simulating) {
+                intervalID = setInterval(evaluateLoop, speed);
+            } else {
+                clearInterval(intervalID);
+            }
+        }
+    } else {
+        mouseflag.right = false;
+    }
+
+    // scroll
+
+    if (mousestate.middle) {
+        if (!mouseflag.middle) {
+            mouseflag.middle = true;
+            [scrollFromX, scrollFromY, scrollOffsetX, scrollOffsetY] = [scrollx, scrolly, mousestate.x, mousestate.y];
+        }
+        scrollx = scrollFromX + (scrollOffsetX - mousestate.x) / zoom;
+        scrolly = scrollFromY + (scrollOffsetY - mousestate.y) / zoom;
+    } else {
+        mouseflag.middle = false;
+    }
+
+    zoom = zoomRate ** mousestate.wheel;
+
+    // run evaluater
+
+    requestAnimationFrame(clientControllLoop);
 }
 
-clientWriteLoop();
+// start mainloop
 
-// start WebGL mainloop
+resize();
+(presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
+
+mousestate.wheel = Math.log(zoom) / Math.log(zoomRate);
+clientControllLoop();
 
 if (paramaters.get("alivesonly") == "true") {
     gl.useProgram(program_alive);
