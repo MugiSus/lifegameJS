@@ -10,6 +10,9 @@ const buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
 const vertShader = gl.createShader(gl.VERTEX_SHADER);
+const fragShader_alive = gl.createShader(gl.FRAGMENT_SHADER);
+const fragShader_dead = gl.createShader(gl.FRAGMENT_SHADER);
+
 gl.shaderSource(vertShader, `
     precision mediump float;
     attribute vec2 vertex;
@@ -17,29 +20,40 @@ gl.shaderSource(vertShader, `
         gl_Position = vec4(vertex, 0.0, 1.0);
     }
 `);
-gl.compileShader(vertShader);
-gl.getShaderParameter(vertShader, gl.COMPILE_STATUS);
-
-const fragShader = gl.createShader(gl.FRAGMENT_SHADER);
-gl.shaderSource(fragShader, `
+gl.shaderSource(fragShader_alive, `
     precision mediump float;
     void main(void) {
         gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0);
     }
 `);
-gl.compileShader(fragShader);
-gl.getShaderParameter(fragShader, gl.COMPILE_STATUS);
+gl.shaderSource(fragShader_dead, `
+    precision mediump float;
+    void main(void) {
+        vec2 pos = gl_FragCoord.xy * 0.1;  
+        gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0) * abs(step(0.5, fract(pos.x + pos.y))) * 0.4;
+    }
+`);
 
-const program = gl.createProgram();
-gl.attachShader(program, vertShader);
-gl.attachShader(program, fragShader);
-gl.linkProgram(program);
-gl.getProgramParameter(program, gl.LINK_STATUS);
-gl.useProgram(program);
+gl.compileShader(vertShader);
+gl.compileShader(fragShader_alive);
+gl.compileShader(fragShader_dead);
 
-const vertex = gl.getAttribLocation(program, "vertex");
-gl.enableVertexAttribArray(vertex);
-gl.vertexAttribPointer(vertex, 2, gl.FLOAT, false, 0, 0);
+const program_alive = gl.createProgram();
+gl.attachShader(program_alive, vertShader);
+gl.attachShader(program_alive, fragShader_alive);
+gl.linkProgram(program_alive);
+
+const program_dead = gl.createProgram();
+gl.attachShader(program_dead, vertShader);
+gl.attachShader(program_dead, fragShader_dead);
+gl.linkProgram(program_dead);
+
+const vertex_alive = gl.getAttribLocation(program_alive, "vertex");
+const vertex_dead = gl.getAttribLocation(program_dead, "vertex");
+gl.enableVertexAttribArray(vertex_alive);
+gl.enableVertexAttribArray(vertex_dead);
+gl.vertexAttribPointer(vertex_alive, 2, gl.FLOAT, false, 0, 0);
+gl.vertexAttribPointer(vertex_dead, 2, gl.FLOAT, false, 0, 0);
 
 // begin drawing
 
@@ -88,14 +102,16 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     if (vertices.alive.length) {
+        gl.useProgram(program_alive);
         gl.bufferData(gl.ARRAY_BUFFER, vertices.alive, gl.DYNAMIC_DRAW);
         gl.drawArrays(gl.TRIANGLES, 0, vertices.alive.length / 2);
     }
 
-    // if (vertices.dead.length) {
-    //     gl.bufferData(gl.ARRAY_BUFFER, vertices.dead, gl.DYNAMIC_DRAW);
-    //     gl.drawArrays(gl.TRIANGLES, 0, vertices.dead.length / 2);
-    // }
+    if (vertices.dead.length) {
+        gl.useProgram(program_dead);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices.dead, gl.DYNAMIC_DRAW);
+        gl.drawArrays(gl.TRIANGLES, 0, vertices.dead.length / 2);
+    }
 
     requestAnimationFrame(main);
 }
