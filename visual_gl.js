@@ -16,21 +16,21 @@ const fragShader_dead = gl.createShader(gl.FRAGMENT_SHADER);
 gl.shaderSource(vertShader, `
     precision mediump float;
     attribute vec2 vertex;
-    void main(void) {
+    void main() {
         gl_Position = vec4(vertex, 0.0, 1.0);
     }
 `);
 gl.shaderSource(fragShader_alive, `
     precision mediump float;
-    void main(void) {
+    void main() {
         gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0);
     }
 `);
 gl.shaderSource(fragShader_dead, `
     precision mediump float;
-    void main(void) {
+    void main() {
         vec2 pos = gl_FragCoord.xy * 0.1;  
-        gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0) * abs(step(0.5, fract(pos.x + pos.y))) * 0.4;
+        gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0) * 0.2;
     }
 `);
 
@@ -39,13 +39,12 @@ gl.compileShader(fragShader_alive);
 gl.compileShader(fragShader_dead);
 
 const program_alive = gl.createProgram();
-gl.attachShader(program_alive, vertShader);
-gl.attachShader(program_alive, fragShader_alive);
-gl.linkProgram(program_alive);
-
 const program_dead = gl.createProgram();
+gl.attachShader(program_alive, vertShader);
 gl.attachShader(program_dead, vertShader);
+gl.attachShader(program_alive, fragShader_alive);
 gl.attachShader(program_dead, fragShader_dead);
+gl.linkProgram(program_alive);
 gl.linkProgram(program_dead);
 
 const vertex_alive = gl.getAttribLocation(program_alive, "vertex");
@@ -96,7 +95,9 @@ let getVertices =(scrollx, scrolly, zoom)=> {
     return vertices;
 }
 
-function main() {
+// main
+
+function visualize_gl_bothDeadAndAlive() {
     let vertices = getVertices(scrollx, scrolly, zoom);
 
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -113,9 +114,18 @@ function main() {
         gl.drawArrays(gl.TRIANGLES, 0, vertices.dead.length / 2);
     }
 
-    requestAnimationFrame(main);
+    requestAnimationFrame(visualize_gl_bothDeadAndAlive);
 }
 
-// main
+function visualize_gl_onlyAlive() {
+    let vertices = getVertices(scrollx, scrolly, zoom);
 
-main();
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    if (vertices.alive.length) {
+        gl.bufferData(gl.ARRAY_BUFFER, vertices.alive, gl.DYNAMIC_DRAW);
+        gl.drawArrays(gl.TRIANGLES, 0, vertices.alive.length / 2);
+    }
+
+    requestAnimationFrame(visualize_gl_onlyAlive);
+}

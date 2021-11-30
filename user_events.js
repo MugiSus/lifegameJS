@@ -96,6 +96,8 @@ let paramaters = new URLSearchParams(location.search);
  * gpf: generations per frame
  */
 
+// set preset
+
 const presets = {
     galaxy:
         new MapPreset(`
@@ -212,3 +214,12 @@ let clientWriteLoop =()=> {
 }
 
 clientWriteLoop();
+
+// start WebGL mainloop
+
+if (paramaters.get("alivesonly") == "true") {
+    gl.useProgram(program_alive);
+    visualize_gl_onlyAlive();
+} else {
+    visualize_gl_bothDeadAndAlive();
+}
