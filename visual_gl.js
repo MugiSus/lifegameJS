@@ -30,7 +30,7 @@ gl.shaderSource(fragShader_dead, `
     precision mediump float;
     void main() {
         vec2 pos = gl_FragCoord.xy * 0.1;  
-        gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0) * (0.15 + abs(step(0.5, fract(pos.x + pos.y))) * 0.15);
+        gl_FragColor = vec4(0.125, 0.75, 0.625, 1.0) * (0.1 + abs(step(0.5, fract(pos.x + pos.y))) * 0.15);
     }
 `);
 

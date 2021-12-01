@@ -245,12 +245,12 @@ let clientControllLoop =()=> {
     if (mousestate.wheel != lastWheel) {
         lastWheel = mousestate.wheel;
         let [scaleCenterX, scaleCenterY] = [
-            (mousestate.x - canvas.width / 2) / zoom + scrollx,
-            (mousestate.y - canvas.height / 2) / zoom + scrolly
+            scrollx + (mousestate.x - canvas.width / 2) / zoom,
+            scrolly + (mousestate.y - canvas.height / 2) / zoom
         ];
         zoom = ZOOM_RATE ** mousestate.wheel;
-        scrollx -= (mousestate.x - canvas.width / 2) / zoom + scrollx - scaleCenterX,
-        scrolly -= (mousestate.y - canvas.height / 2) / zoom + scrolly - scaleCenterY
+        scrollx = -(mousestate.x - canvas.width / 2) / zoom + scaleCenterX,
+        scrolly = -(mousestate.y - canvas.height / 2) / zoom + scaleCenterY
     }
 
     // run evaluater
@@ -261,7 +261,7 @@ let clientControllLoop =()=> {
 // start mainloop
 
 resize();
-(presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
+(presets[paramaters.get('preset')] ?? presets.glidergun).apply(0, 0);
 
 mousestate.wheel = Math.log(zoom) / Math.log(ZOOM_RATE);
 lastWheel = mousestate.wheel;
