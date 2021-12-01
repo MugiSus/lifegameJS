@@ -2,14 +2,24 @@
 A lifegame which is using JS.
 
 JSを使ったライフゲームです。(3作目)
-- [1作目](https://www.mugisus.com/game_of_life) [(ソースコード)](https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life/src.js)
-- [2作目](https://www.mugisus.com/game_of_life_inf) [(ソースコード)](https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life_inf/src.js)
+- [1作目](https://www.mugisus.com/game_of_life)
+  - 通常の2次元配列を使用。
+  - 空間が有限なのでチューリング完全でない。
+  - プログラムが本当に汚い。[^1]
+  - O(n²)。
+- [2作目](https://www.mugisus.com/game_of_life_inf)
+  - 採れたての新鮮な連想配列を使用。
+  - 理論上空間が無限なのでチューリング完全だけど、アルゴリズムが良くないので爆発的に重い。
+  - プログラムが本当に汚い。[^2]
+  - O(n²)。
 - [3作目](https://www.mugisus.com/lifegameJS) ←これ
+  - 産地直送で厳選された2次元の連想配列をふんだんに使用。
+  - 理論上空間が無限なのでチューリング完全。アルゴリズムが良いので軽い。
+  - プログラムがそこまで汚くない。[^3]
+  - O(n)。
 
-[lifegame.js](https://github.com/MugiSus/lifegameJS/blob/main/lifegame.js)
-
-速度も速いしソースコードも随分と綺麗になったんじゃないですかね。あと趣味で書いたコードなので可読性には帰ってもらっています。<br>
-具体的には計算量がO(n²)からO(n)になったとおもいます。たぶんね。
+速度も速いしソースコードも随分と綺麗になったんじゃないですかね。あと趣味で書いたコードなので可読性には帰ってもらっています。
+軽さに関してはシュシュポッポ列車などを稼働させてみるとかなりわかりやすいです。
 
 ```js
 cw(0, 0, 1);
@@ -35,7 +45,7 @@ for (let i = 0; i < 100; i++) ep = e(ep);
 ```
 trueとfalseでわかりにくいですがちゃんと動いてますね。
 
-図示するとこんな感じです。<br>
+図示するとこんな感じです。[^4]<br>
 ✖️◼️◼️◼️✖️<br>
 ◼️◼️◼️◼️◼️<br>
 ◼️◼️◼️◻️◼️<br>
@@ -60,7 +70,7 @@ ep = e(ep);
 ```
 ちなみにこれはペンタデカスロンです。周期15で振動します。
 
-## 2021.12.2 追伸
+## WebGL GUI (2021.12.02追記)
 
 [<img width="1680" alt="WebGL GUI is here." src="https://user-images.githubusercontent.com/42643211/144275223-82d890da-ed2b-4002-864d-68a34f656141.png">](https://www.mugisus.com/lifegameJS/)
 
@@ -75,3 +85,8 @@ ep = e(ep);
 |preset|glidergun|プリセット名。galaxyとかacornとかpentadecathlonとか。|
 |speed|100|計算間隔(ミリ秒)|
 |gpf|1|Generations Per Frame。一回の計算で何世代進めるか。<br>100とかにするとビュンビュン進みますがお使いのパソコンの性能と相談してからにしてください|
+
+[^1]: https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life/src.js
+[^2]: https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life_inf/src.js
+[^3]: https://github.com/MugiSus/lifegameJS/blob/main/lifegame.js
+[^4]: 便宜上転置しちゃってますが、正しくはx軸とy軸が逆です。
