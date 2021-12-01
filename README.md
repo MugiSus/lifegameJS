@@ -67,8 +67,8 @@ ep = e(ep);
 
 ちなみに実行速度はクエリでも変更できます。
 (e.g. [?preset=23334m&speed=0&gpf=1](https://www.mugisus.com/lifegameJS/?preset=23334m&speed=0&gpf=1))
-|属性|役割|
-|---|---|
-|preset|プリセット名。galaxyとかacornとかpentadecathlonとか。何も書かないとglidergunになります|
-|speed|計算間隔(ミリ秒)|
-|gpf|Generations Per Frame。一回の計算で何世代進めるか。<br>100とかにするとビュンビュン進みますがお使いのパソコンの性能と相談してからにしてください|
+|属性|役割|未定義時|
+|---|---|---|
+|preset|glidergun|プリセット名。galaxyとかacornとかpentadecathlonとか。|
+|speed|100|計算間隔(ミリ秒)|
+|gpf|1|Generations Per Frame。一回の計算で何世代進めるか。<br>100とかにするとビュンビュン進みますがお使いのパソコンの性能と相談してからにしてください|
