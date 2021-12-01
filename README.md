@@ -61,7 +61,8 @@ ep = e(ep);
 
 ## 2021.12.2 追伸
 
-<img width="1680" alt="[GUI スクリーンショット]" src="https://user-images.githubusercontent.com/42643211/144273953-affd5b86-d4ad-4e3c-af0d-de1debb588f3.png">
+<img width="1680" alt="WebGL GUI is here." src="https://user-images.githubusercontent.com/42643211/144275223-82d890da-ed2b-4002-864d-68a34f656141.png">
+
 ユーザーフレンドリー?なGUIができました。<br>
 **右クリック**で再生/一時停止、**右ドラッグ**でスクロール、**ホイール**でズームイン/アウト、**左クリック**で編集です。<br>
 実行速度とかの動的な変更やスマートフォンとかへの対応はもうちょっと待っててね。
