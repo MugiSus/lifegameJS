@@ -22,8 +22,8 @@ let mousestate = {
 let mousemove =(event)=> {
     [mousestate.x, mousestate.y] = [event.clientX, event.clientY];
     [mousestate.cellx, mousestate.celly] = [
-        Math.floor(((mousestate.x - canvas.width / 2) / zoom + 50 + scrollx) / 100),
-        Math.floor(((mousestate.y - canvas.height / 2) / zoom + 50 + scrolly) / 100)
+        Math.floor(((mousestate.x - canvas.width / 2) / zoom + scrollx + 50) / 100),
+        Math.floor(((mousestate.y - canvas.height / 2) / zoom + scrolly + 50) / 100)
     ]
 }
 
@@ -185,29 +185,30 @@ const presets = {
 
 // resize and begin mainloop
 
-const zoomRate = 0.999;
+const ZOOM_RATE = 0.999; // n < 1
 
 let gpf = (paramaters.get("gpf") || 1) * 1;
 let speed = (paramaters.get("speed") ?? 100) * 1;
 let generations = 0;
-
-let evaluateLoop =()=> {
-    generations += gpf;
-    for (let i = 0; i < gpf; i++) ep = e(ep);
-}
-
-let simulating = false;
-let intervalID = null;
-
-let scrollOffsetX, scrollOffsetY, scrollFromX, scrollFromY;
 
 let mouseflag = {
     left: false,
     middle: false,
     right: false,
 };
+
+let lastWheel = 0;
+
+let simulating = false;
+let intervalID = null;
+
+let scrollOffsetX, scrollOffsetY, scrollFromX, scrollFromY;
 let clientWriteMode = false;
 
+let evaluateLoop =()=> {
+    generations += gpf;
+    for (let i = 0; i < gpf; i++) ep = e(ep);
+}
 let clientControllLoop =()=> {
     // client write
 
@@ -226,31 +227,31 @@ let clientControllLoop =()=> {
     if (mousestate.right) {
         if (!mouseflag.right) {
             mouseflag.right = true;
-            simulating = !simulating;
-            if (simulating) {
-                intervalID = setInterval(evaluateLoop, speed);
-            } else {
-                clearInterval(intervalID);
-            }
-        }
-    } else {
-        mouseflag.right = false;
-    }
-
-    // scroll
-
-    if (mousestate.middle) {
-        if (!mouseflag.middle) {
-            mouseflag.middle = true;
             [scrollFromX, scrollFromY, scrollOffsetX, scrollOffsetY] = [scrollx, scrolly, mousestate.x, mousestate.y];
         }
         scrollx = scrollFromX + (scrollOffsetX - mousestate.x) / zoom;
         scrolly = scrollFromY + (scrollOffsetY - mousestate.y) / zoom;
     } else {
-        mouseflag.middle = false;
+        if (mouseflag.right && scrollx == scrollFromX && scrolly == scrollFromY) {
+            simulating = !simulating;
+            if (simulating) 
+                intervalID = setInterval(evaluateLoop, speed);
+            else
+                clearInterval(intervalID);
+        }
+        mouseflag.right = false;
     }
 
-    zoom = zoomRate ** mousestate.wheel;
+    if (mousestate.wheel != lastWheel) {
+        lastWheel = mousestate.wheel;
+        let [scaleCenterX, scaleCenterY] = [
+            (mousestate.x - canvas.width / 2) / zoom + scrollx,
+            (mousestate.y - canvas.height / 2) / zoom + scrolly
+        ];
+        zoom = ZOOM_RATE ** mousestate.wheel;
+        scrollx -= (mousestate.x - canvas.width / 2) / zoom + scrollx - scaleCenterX,
+        scrolly -= (mousestate.y - canvas.height / 2) / zoom + scrolly - scaleCenterY
+    }
 
     // run evaluater
 
@@ -262,7 +263,9 @@ let clientControllLoop =()=> {
 resize();
 (presets[paramaters.get('preset') ?? "glidergun"]).apply(0, 0);
 
-mousestate.wheel = Math.log(zoom) / Math.log(zoomRate);
+mousestate.wheel = Math.log(zoom) / Math.log(ZOOM_RATE);
+lastWheel = mousestate.wheel;
+
 clientControllLoop();
 
 if (paramaters.get("alivesonly") == "true") {
