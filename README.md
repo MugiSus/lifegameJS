@@ -88,5 +88,5 @@ ep = e(ep);
 
 [^1]: https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life/src.js
 [^2]: https://github.com/MugiSus/mugisus.github.io/blob/master/game_of_life_inf/src.js
-[^3]: https://github.com/MugiSus/lifegameJS/blob/main/lifegame.js
+[^3]: ただし趣味・思想が全開なので、可読性は保証しません。https://github.com/MugiSus/lifegameJS/blob/main/lifegame.js
 [^4]: 便宜上転置しちゃってますが、正しくはx軸とy軸が逆です。
