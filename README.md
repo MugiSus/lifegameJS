@@ -1,4 +1,4 @@
-# lifegameJS
+# [lifegameJS](https://www.mugisus.com/lifegameJS)
 A lifegame which is using JS.
 
 JSを使ったライフゲームです。(3作目)
